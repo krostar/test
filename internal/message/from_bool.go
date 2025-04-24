@@ -112,7 +112,7 @@ func customizeASTExprRepr(pkg *packages.Package, result bool, expr ast.Expr) (st
 			xIsFunc := isExprFunc(pkg, expr.X)
 			xIsFuncRetuningError := isExprFuncReturningOnlyError(pkg, expr.X)
 			yIsNil := isExprNil(pkg, expr.Y)
-			yIsBool := isExprBool(pkg, expr.Y)
+			yIsBool, yBoolValue := isExprBool(pkg, expr.Y), getExprBoolValue(pkg, expr.Y)
 
 			switch {
 			case xIsFunc && xIsFuncRetuningError && yIsNil && resultIsEqual:
@@ -129,10 +129,14 @@ func customizeASTExprRepr(pkg *packages.Package, result bool, expr ast.Expr) (st
 				return x + " is nil", nil
 			case !xIsFunc && yIsNil && !resultIsEqual:
 				return x + " is not nil", nil
-			case !xIsFunc && yIsBool && resultIsEqual:
-				return fmt.Sprintf("%s is %t", x, mustGetExprBoolValue(pkg, expr.Y)), nil
-			case !xIsFunc && yIsBool && !resultIsEqual:
-				return fmt.Sprintf("%s is not %t", x, mustGetExprBoolValue(pkg, expr.Y)), nil
+			case !xIsFunc && yIsBool && resultIsEqual && yBoolValue != nil:
+				return fmt.Sprintf("%s is %t", x, *yBoolValue), nil
+			case !xIsFunc && yIsBool && resultIsEqual && yBoolValue == nil:
+				return fmt.Sprintf("%s is equal to %s", x, y), nil
+			case !xIsFunc && yIsBool && !resultIsEqual && yBoolValue != nil:
+				return fmt.Sprintf("%s is not %t", x, *yBoolValue), nil
+			case !xIsFunc && yIsBool && !resultIsEqual && yBoolValue == nil:
+				return fmt.Sprintf("%s is not equal to %s", x, y), nil
 			default:
 				if resultIsEqual {
 					return x + " is equal to " + y, nil
@@ -320,16 +324,17 @@ func getIdentSelector(pkg *packages.Package, expr *ast.Ident) (string, string, e
 	return obj.Pkg().Path(), obj.Name(), nil
 }
 
-func mustGetExprBoolValue(pkg *packages.Package, expr ast.Expr) bool {
-	if expr == nil {
-		panic("expr is nil")
+func getExprBoolValue(pkg *packages.Package, expr ast.Expr) *bool {
+	if pkg == nil || expr == nil {
+		return nil
 	}
 
 	if tv, ok := pkg.TypesInfo.Types[expr]; ok && tv.IsValue() {
 		if tv.Value != nil && tv.Value.Kind() == constant.Bool {
-			return constant.BoolVal(tv.Value)
+			value := constant.BoolVal(tv.Value)
+			return &value
 		}
 	}
 
-	panic(fmt.Sprintf("type %v not found or value is not a bool", expr))
+	return nil
 }

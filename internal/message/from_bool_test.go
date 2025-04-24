@@ -266,7 +266,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 				},
 				expectedMessage: "a is nil",
 			},
-			"EQ-not-func-compared-to-bool_true": {
+			"EQ-not-func-compared-to-bool_true-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
 					pkg, expr := getTestingExpr[bool](t, b == false)
@@ -274,7 +274,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 				},
 				expectedMessage: "b is false",
 			},
-			"NEQ-not-func-compared-to-bool_true": {
+			"NEQ-not-func-compared-to-bool_true-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
 					pkg, expr := getTestingExpr[bool](t, b != true)
@@ -282,7 +282,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 				},
 				expectedMessage: "b is not true",
 			},
-			"EQ-not-func-compared-to-bool_false": {
+			"EQ-not-func-compared-to-bool_false-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
 					pkg, expr := getTestingExpr[bool](t, b == true)
@@ -290,13 +290,33 @@ func Test_customizeASTExprRepr(t *testing.T) {
 				},
 				expectedMessage: "b is not true",
 			},
-			"NEQ-not-func-compared-to-bool_false": {
+			"NEQ-not-func-compared-to-bool_false-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
 					pkg, expr := getTestingExpr[bool](t, b != false)
 					return customizeASTExprRepr(pkg, false, expr)
 				},
 				expectedMessage: "b is false",
+			},
+			"EQ-not-func-compared-to-bool-not-constant": {
+				getResult: func(t *testing.T) (string, error) {
+					var (
+						b1 bool
+						b2 bool
+					)
+					pkg, expr := getTestingExpr[bool](t, b1 == b2)
+					return customizeASTExprRepr(pkg, true, expr)
+				},
+				expectedMessage: "b1 is equal to b2",
+			},
+			"NEQ-not-func-compared-to-bool-not-constant": {
+				getResult: func(t *testing.T) (string, error) {
+					var b1 bool
+					b2 := true
+					pkg, expr := getTestingExpr[bool](t, b1 != b2)
+					return customizeASTExprRepr(pkg, true, expr)
+				},
+				expectedMessage: "b1 is not equal to b2",
 			},
 			"GTR_true": {
 				getResult: func(t *testing.T) (string, error) {
@@ -903,38 +923,29 @@ func Test_getIdentSelector(t *testing.T) {
 	})
 }
 
-func Test_mustGetExprBoolValue(t *testing.T) {
-	if !mustGetExprBoolValue(getTestingExpr(t, true)) {
+func Test_getExprBoolValue(t *testing.T) {
+	if !*getExprBoolValue(getTestingExpr(t, true)) {
 		t.Error("expected true")
 	}
 
-	if mustGetExprBoolValue(getTestingExpr(t, false)) {
+	if *getExprBoolValue(getTestingExpr(t, false)) {
 		t.Error("expected false")
 	}
 
 	t.Run("nil value", func(t *testing.T) {
-		defer func() {
-			reason := recover()
-			if reason == nil {
-				t.Error("expected panic")
-			}
-		}()
-
-		if mustGetExprBoolValue(nil, nil) {
+		if getExprBoolValue(nil, nil) != nil {
 			t.Error("expected false")
 		}
 	})
 
-	t.Run("non-bool value", func(t *testing.T) {
-		defer func() {
-			reason := recover()
-			if reason == nil {
-				t.Error("expected panic")
-			}
-		}()
+	t.Run("non-bool value or not constant value", func(t *testing.T) {
+		if getExprBoolValue(getTestingExpr(t, 42)) != nil {
+			t.Error("expected nil")
+		}
 
-		if mustGetExprBoolValue(getTestingExpr(t, 42)) {
-			t.Error("expected false")
+		var b bool
+		if getExprBoolValue(getTestingExpr(t, b)) != nil {
+			t.Error("expected nil")
 		}
 	})
 }
