@@ -5,13 +5,14 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+env:
+  GITHUB_COM_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 jobs:
   check-quality:
     permissions:
       actions: "write"
     runs-on: "ubuntu-latest"
     steps:
-      # setup
       - uses: "nixbuild/nix-quick-install-action@5bb6a3b3abe66fd09bbf250dce8ada94f856a703" # v30
       - uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683" # v4
       - uses: "nix-community/cache-nix-action@135667ec418502fa5a3598af6fb9eb733888ce6a" # v6
@@ -33,38 +34,5 @@ jobs:
         run: "nix flake metadata"
       - name: "Setup shell"
         run: "nix develop --command true"
-
-      # tests
-      - uses: "DeterminateSystems/flake-checker-action@078f5f7f47ee188aa6cb472527ca5984e195222d" # v9
-        with:
-          fail-mode: true
-          ignore-missing-flake-lock: false
-          nixpkgs-keys: "nixpkgs"
-          send-statistics: false
-
-      - name: "Flake check"
-        run: "nix flake check --all-systems --print-build-logs"
-
-      - name: "Files respect Editorconfig configuration"
-        run: "nix develop --command lint-editorconfig"
-
-      - name: "Files respect treefmt format"
-        run: "nix develop --command treefmt --no-cache --fail-on-change"
-
-      - name: "Lint Github Actions"
-        run: "nix develop --command lint-ghaction"
-
-      - name: "Lint Shell scripts"
-        run: "nix develop --command lint-sh"
-
-      - name: "Lint YAML configurations files"
-        run: "nix develop --command lint-yaml"
-
-      - name: "Lint Go code"
-        run: "nix develop --command lint-go"
-
-      - name: "Lint Nix code"
-        run: "nix develop --command lint-nix"
-
-      - name: "Run go unit tests"
-        run: "nix develop --command go test -v -race -count 10 -failfast -timeout 45s -shuffle on ./..."
+      - name: "Just CI"
+        run: "nix develop --command just ci"
