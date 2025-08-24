@@ -5,7 +5,7 @@
 ![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8.svg)
 
 A lightweight, dependency-minimal testing library for Go that provides detailed assertion messages through source code analysis.
-Designed to make your tests clear, readable, and maintainable.
+Designed to make your tests as clear, readable, and maintainable as the code being tested.
 
 ## Why
 
