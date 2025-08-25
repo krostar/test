@@ -35,6 +35,7 @@ func ParsePackageAST(ctx context.Context, pkgDir string) (map[string]*packages.P
 				errs = append(errs, err)
 			}
 		}
+
 		if len(errs) > 0 {
 			return nil, fmt.Errorf("loaded packages contained errors: %v", errors.Join(errs...))
 		}
@@ -49,6 +50,7 @@ func ParsePackageAST(ctx context.Context, pkgDir string) (map[string]*packages.P
 			pkgPathWithoutVendor := strings.TrimPrefix(pkg.PkgPath, "vendor/")
 			pkgPathToPkg[pkgPathWithoutVendor] = pkg
 		}
+
 		return true
 	}, nil)
 

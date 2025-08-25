@@ -41,6 +41,10 @@ func (Fake) Fail() {}
 // This is a no-op implementation.
 func (Fake) FailNow() {}
 
+// Log implements the TestingT interface.
+// This is a no-op implementation.
+func (Fake) Log(...any) {}
+
 // Logf implements the TestingT interface.
 // This is a no-op implementation.
 func (Fake) Logf(string, ...any) {}

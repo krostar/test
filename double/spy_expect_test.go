@@ -94,7 +94,6 @@ func Test_SpyTestingT_ExpectRecords(t *testing.T) {
 func Test_SpyTestingT_ExpectNoLogs(t *testing.T) {
 	testedT := NewSpy(NewFake())
 	testedT.ExpectNoLogs(t)
-
 	testedT.Logf("hello world")
 
 	spiedT := NewSpy(NewFake())
@@ -106,11 +105,13 @@ func Test_SpyTestingT_ExpectNoLogs(t *testing.T) {
 func Test_SpyTestingT_ExpectLogsToContain(t *testing.T) {
 	testedT := NewSpy(NewFake())
 	spiedT := NewSpy(NewFake())
+
 	testedT.ExpectLogsToContain(spiedT, "foo")
 	spiedT.ExpectTestToFail(t)
 	spiedT.ExpectLogsToContain(t, "Expected log to contain message")
 
 	spiedT = NewSpy(NewFake())
+
 	testedT.Logf("hello world")
 	testedT.ExpectLogsToContain(t, "hello world")
 	testedT.ExpectLogsToContain(spiedT, "foo")
@@ -125,12 +126,11 @@ func Test_SpyTestingT_ExpectLogsToContain(t *testing.T) {
 
 func Test_SpyTestingT_ExpectTestToFail(t *testing.T) {
 	testedT := NewSpy(NewFake())
-
 	spiedT := NewSpy(NewFake())
+
 	testedT.ExpectTestToFail(spiedT)
 	spiedT.ExpectTestToFail(t)
 	spiedT.ExpectLogsToContain(t, "Expected test to fail but test succeeded")
-
 	testedT.Fail()
 	testedT.ExpectTestToFail(t)
 }
@@ -138,8 +138,8 @@ func Test_SpyTestingT_ExpectTestToFail(t *testing.T) {
 func Test_SpyTestingT_ExpectTestToPass(t *testing.T) {
 	testedT := NewSpy(NewFake())
 	testedT.ExpectTestToPass(t)
-
 	testedT.Fail()
+
 	spiedT := NewSpy(NewFake())
 	testedT.ExpectTestToPass(spiedT)
 	spiedT.ExpectTestToFail(t)

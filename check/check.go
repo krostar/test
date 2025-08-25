@@ -52,7 +52,9 @@ func Eventually(ctx context.Context, t test.TestingT, check func(context.Context
 			} else {
 				return t, true, fmt.Sprintf("check passed in %s with %d retries", time.Since(startedAt).String(), retries)
 			}
+
 			retries++
+
 			ticker.Reset(timeBetweenRetries)
 
 		case <-ticker.C:
@@ -102,7 +104,8 @@ func Panics(t test.TestingT, f func(), assertReason func(reason any) error) (tt 
 		return t, false, "function to test for panic must not be nil"
 	}
 
-	tt = t //
+	tt = t
+
 	defer func() {
 		reason := recover()
 

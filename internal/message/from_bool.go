@@ -84,6 +84,7 @@ func customizeASTExprRepr(pkg *packages.Package, result bool, expr ast.Expr) (st
 			if x, err = customizeASTExprRepr(pkg, result, expr.X); err != nil {
 				return "", fmt.Errorf("unable to get LAND/LOR %T.X custom repr: %v", expr, err)
 			}
+
 			if y, err = customizeASTExprRepr(pkg, result, expr.Y); err != nil {
 				return "", fmt.Errorf("unable to get LAND/LOR %T.Y custom repr: %v", expr, err)
 			}
@@ -267,6 +268,7 @@ func isExprBool(pkg *packages.Package, expr ast.Expr) bool {
 	}
 
 	typ := pkg.TypesInfo.TypeOf(expr)
+
 	basic, ok := typ.(*types.Basic)
 	if !ok {
 		return false
@@ -279,6 +281,7 @@ func isExprFunc(_ *packages.Package, expr ast.Expr) bool {
 	if expr == nil {
 		return false
 	}
+
 	_, ok := expr.(*ast.CallExpr)
 	return ok
 }

@@ -13,6 +13,7 @@ func Test_Assert(t *testing.T) {
 			if result := Assert(spiedT, true, "hello from %s", t.Name()); !result {
 				t.Error("Assert should return true when result is true")
 			}
+
 			spiedT.ExpectTestToPass(t)
 			spiedT.ExpectNoLogs(t)
 		})
@@ -20,12 +21,14 @@ func Test_Assert(t *testing.T) {
 		t.Run("with success message enabled", func(t *testing.T) {
 			originalSuccessMessageEnabled := SuccessMessageEnabled
 			t.Cleanup(func() { SuccessMessageEnabled = originalSuccessMessageEnabled })
+
 			SuccessMessageEnabled = true
 
 			spiedT := double.NewSpy(double.NewFake())
 			if result := Assert(spiedT, true, "hello from %s", t.Name()); !result {
 				t.Error("Assert should return true when result is true")
 			}
+
 			spiedT.ExpectTestToPass(t)
 			spiedT.ExpectLogsToContain(t, "Success:", "[hello from Test_Assert/assertion_true/with_success_message_enabled]")
 		})
@@ -36,6 +39,7 @@ func Test_Assert(t *testing.T) {
 		if result := Assert(spiedT, false, "hello from %s", t.Name()); result {
 			t.Error("Assert should return false when result is false")
 		}
+
 		spiedT.ExpectTestToFail(t)
 		spiedT.ExpectLogsToContain(t, "Error:", "[hello from Test_Assert/assertion_false]")
 	})
@@ -53,6 +57,7 @@ func Test_Require(t *testing.T) {
 		t.Run("with success message enabled", func(t *testing.T) {
 			originalSuccessMessageEnabled := SuccessMessageEnabled
 			t.Cleanup(func() { SuccessMessageEnabled = originalSuccessMessageEnabled })
+
 			SuccessMessageEnabled = true
 
 			spiedT := double.NewSpy(double.NewFake())
@@ -75,6 +80,7 @@ func Test_logResult(t *testing.T) {
 	t.Run("success without message", func(t *testing.T) {
 		originalSuccessMessageEnabled := SuccessMessageEnabled
 		t.Cleanup(func() { SuccessMessageEnabled = originalSuccessMessageEnabled })
+
 		SuccessMessageEnabled = false
 
 		spiedT := double.NewSpy(double.NewFake())
@@ -85,6 +91,7 @@ func Test_logResult(t *testing.T) {
 	t.Run("success with message", func(t *testing.T) {
 		originalSuccessMessageEnabled := SuccessMessageEnabled
 		t.Cleanup(func() { SuccessMessageEnabled = originalSuccessMessageEnabled })
+
 		SuccessMessageEnabled = true
 
 		spiedT := double.NewSpy(double.NewFake())

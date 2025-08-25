@@ -31,10 +31,12 @@ func Test_FakeWithRegisterCleanup(t *testing.T) {
 	called := false
 	FakeWithRegisterCleanup(func(f func()) {
 		called = true
+
 		f()
 	})(o)
 
 	o.registerCleanup(func() {})
+
 	if !called {
 		t.Error("registerCleanup was not set")
 	}

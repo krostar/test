@@ -58,5 +58,6 @@ func GetPackageAST(pkgDir string) (map[string]*packages.Package, error) {
 	}
 
 	_astPkgPathToPkg[pkgDir] = pkgPathToPkg
+
 	return pkgPathToPkg, nil
 }

@@ -729,6 +729,7 @@ func Test_isExprBool(t *testing.T) {
 			ctrue  = true
 			cfalse = false
 		)
+
 		var (
 			vtrue  = true
 			vfalse = false
@@ -871,10 +872,12 @@ func Test_isExprFuncReturningOnlyError(t *testing.T) {
 func Test_getIdentSelector(t *testing.T) {
 	t.Run("bad expr", func(t *testing.T) {
 		pkg, _ := rawGetTestingExpr(t, 0, "rawGetTestingExpr", 42)
+
 		_, _, err := getIdentSelector(pkg, new(ast.Ident))
 		if err == nil {
 			t.Fatal("expected error")
 		}
+
 		if !strings.Contains(err.Error(), "ident object is nil") {
 			t.Errorf("expected different error reason: %v", err)
 		}
@@ -882,6 +885,7 @@ func Test_getIdentSelector(t *testing.T) {
 
 	t.Run("nil expr", func(t *testing.T) {
 		pkg, _ := rawGetTestingExpr(t, 0, "rawGetTestingExpr", 42)
+
 		p, i, err := getIdentSelector(pkg, nil)
 		switch {
 		case err != nil:
@@ -913,6 +917,7 @@ func Test_getIdentSelector(t *testing.T) {
 
 	t.Run("local var", func(t *testing.T) {
 		var b bool
+
 		p, i, err := getIdentSelector(getTestingIdent(t, b))
 		switch {
 		case err != nil:
@@ -955,7 +960,7 @@ func rawGetTestingExpr[T any](t *testing.T, stack int, funcName string, _ T) (*p
 
 	_, callerFile, callerLine, ok := runtime.Caller(stack + 1)
 	if !ok {
-		t.Fatalf("no caller information available")
+		t.Fatal("no caller information available")
 	}
 
 	pkgPathToPkg, err := code.GetPackageAST(filepath.Clean(filepath.Dir(callerFile)))
@@ -987,6 +992,7 @@ func rawGetTestingExpr[T any](t *testing.T, stack int, funcName string, _ T) (*p
 				expr = prev
 				return false
 			}
+
 			prev = nil
 			return true
 		}
@@ -1000,7 +1006,7 @@ func rawGetTestingExpr[T any](t *testing.T, stack int, funcName string, _ T) (*p
 	})
 
 	if expr == nil {
-		t.Fatalf("no call expression found")
+		t.Fatal("no call expression found")
 	}
 
 	return pkg, expr.Args[1]
@@ -1017,7 +1023,7 @@ func getTestingIdent[T any](t *testing.T, v T) (*packages.Package, *ast.Ident) {
 
 	pkg, expr := rawGetTestingExpr(t, 1, "getTestingIdent", v)
 	if expr == nil {
-		t.Fatalf("no call expression found")
+		t.Fatal("no call expression found")
 		return nil, nil
 	}
 

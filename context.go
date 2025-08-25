@@ -30,6 +30,7 @@ func Context(t TestingT) context.Context {
 		deadline = deadline.Add(-cleanDuration)
 
 		var cancel context.CancelFunc
+
 		ctx, cancel = context.WithDeadline(ctx, deadline)
 		t.Cleanup(cancel)
 	}

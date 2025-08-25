@@ -53,6 +53,7 @@ func (h *slogHandler) Handle(_ context.Context, record slog.Record) error {
 	})
 
 	h.t.Logf("%s %s", strings.Join(attrs, " "), record.Message)
+
 	return nil
 }
 

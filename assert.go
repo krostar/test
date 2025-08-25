@@ -40,6 +40,7 @@ func Assert(t TestingT, result bool, msgAndArgs ...any) bool {
 	t.Helper()
 
 	logResult(t, result, 1, msgAndArgs...)
+
 	if !result {
 		t.Fail()
 	}
@@ -53,6 +54,7 @@ func Require(t TestingT, result bool, msgAndArgs ...any) {
 	t.Helper()
 
 	logResult(t, result, 1, msgAndArgs...)
+
 	if !result {
 		t.FailNow()
 	}
@@ -85,6 +87,7 @@ func logResult(t TestingT, result bool, callerStackIndex int, msgAndArgs ...any)
 
 	if (result && (SuccessMessageEnabled || *_flagEnableSuccessMessage)) || !result {
 		var err error
+
 		msg, err = message.FromBool(callerStackIndex+1, result)
 		if err != nil {
 			t.Logf("krostar/test internal failure: unable to get assertion message: %v", err)

@@ -14,12 +14,12 @@ func Test_ParsePackageAST(t *testing.T) {
 		}
 
 		if len(pkgs) == 0 {
-			t.Fatalf("expected at least one package")
+			t.Fatal("expected at least one package")
 		}
 
 		pkg, exists := pkgs["github.com/krostar/test/internal/code/testdata/ok"]
 		if pkg == nil || !exists {
-			t.Fatalf("package testdata not found")
+			t.Fatal("package testdata not found")
 		}
 
 		if pkg.Name != "ok" {
@@ -27,15 +27,15 @@ func Test_ParsePackageAST(t *testing.T) {
 		}
 
 		if pkg.TypesInfo == nil {
-			t.Fatalf("TypesInfo should not be nil")
+			t.Fatal("TypesInfo should not be nil")
 		}
 
 		if pkg.TypesInfo.Defs == nil {
-			t.Fatalf("TypesInfo.Defs should not be nil")
+			t.Fatal("TypesInfo.Defs should not be nil")
 		}
 
 		if pkg.TypesInfo.Uses == nil {
-			t.Fatalf("TypesInfo.Uses should not be nil")
+			t.Fatal("TypesInfo.Uses should not be nil")
 		}
 	})
 
@@ -44,6 +44,7 @@ func Test_ParsePackageAST(t *testing.T) {
 		if err == nil || pkgs != nil {
 			t.Fatalf("pkgs should be nil && err should be not nil: %v", err)
 		}
+
 		if !strings.Contains(err.Error(), "loaded packages contained errors") {
 			t.Errorf("unexpected error message %q", err.Error())
 		}
@@ -57,6 +58,7 @@ func Test_ParsePackageAST(t *testing.T) {
 		if err == nil || pkgs != nil {
 			t.Fatalf("pkgs should be nil && err should be not nil: %v", err)
 		}
+
 		if !strings.Contains(err.Error(), "unable to load packages") {
 			t.Errorf("unexpected error message %s", err.Error())
 		}

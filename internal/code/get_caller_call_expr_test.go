@@ -11,6 +11,7 @@ func Test_GetCallerCallExpr(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to parse package AST: %v", err)
 	}
+
 	ok := pkgs["github.com/krostar/test/internal/code/testdata/ok"]
 
 	t.Run("ok", func(t *testing.T) {
@@ -18,12 +19,13 @@ func Test_GetCallerCallExpr(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to get caller expr: %v", err)
 		}
+
 		if expr == nil || file == nil || pkg == nil {
-			t.Fatalf("expected expr, file, and pkg to be non-nil")
+			t.Fatal("expected expr, file, and pkg to be non-nil")
 		}
 
 		if pkg.PkgPath != ok.PkgPath {
-			t.Errorf("expected pkg to be the ok pkg")
+			t.Error("expected pkg to be the ok pkg")
 		}
 
 		if fileName := pkg.Fset.Position(file.Pos()).Filename; fileName != ok.CompiledGoFiles[0] {
@@ -39,11 +41,11 @@ func Test_GetCallerCallExpr(t *testing.T) {
 		t.Run("pkg not found", func(t *testing.T) {
 			expr, file, pkg, err := GetCallerCallExpr(pkgs, "./notexisting.go", 1043)
 			if err == nil {
-				t.Errorf("expected failure")
+				t.Error("expected failure")
 			}
 
 			if expr != nil || file != nil || pkg != nil {
-				t.Errorf("expected expr, file, and pkg to be nil")
+				t.Error("expected expr, file, and pkg to be nil")
 			}
 
 			if !strings.Contains(err.Error(), "unable to find ast file and package") {
@@ -54,11 +56,11 @@ func Test_GetCallerCallExpr(t *testing.T) {
 		t.Run("expr not found", func(t *testing.T) {
 			expr, file, pkg, err := GetCallerCallExpr(pkgs, ok.CompiledGoFiles[0], 5)
 			if err == nil {
-				t.Errorf("expected failure")
+				t.Error("expected failure")
 			}
 
 			if expr != nil || file != nil || pkg != nil {
-				t.Errorf("expected expr, file, and pkg to be nil")
+				t.Error("expected expr, file, and pkg to be nil")
 			}
 
 			if !strings.Contains(err.Error(), "unable to get call expression") {

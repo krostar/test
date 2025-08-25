@@ -111,7 +111,7 @@ func (spy *Spy) ExpectTestToFail(t TestingT) {
 	t.Helper()
 
 	if !spy.failed {
-		t.Logf("Expected test to fail but test succeeded")
+		t.Log("Expected test to fail but test succeeded")
 		t.Fail()
 	}
 }
@@ -126,7 +126,7 @@ func (spy *Spy) ExpectTestToPass(t TestingT) {
 	t.Helper()
 
 	if spy.failed {
-		t.Logf("Expected test to succeed but test failed")
+		t.Log("Expected test to succeed but test failed")
 		t.Fail()
 	}
 }

@@ -13,6 +13,7 @@ func Test_SpyTestingT_Helper(t *testing.T) {
 
 func Test_SpyTestingT_Cleanup(t *testing.T) {
 	var cleanup func()
+
 	spiedT := NewSpy(NewFake(FakeWithRegisterCleanup(func(f func()) { cleanup = f })))
 
 	cleanupCalled := false
@@ -46,6 +47,16 @@ func Test_SpyTestingT_FailNow(t *testing.T) {
 	spiedT.FailNow()
 	spiedT.ExpectTestToFail(t)
 	spiedT.ExpectRecords(t, true, SpyTestingTRecord{Method: "FailNow"})
+}
+
+func Test_SpyTestingT_Log(t *testing.T) {
+	spiedT := NewSpy(NewFake())
+	spiedT.Log("hello", "world")
+	spiedT.ExpectLogsToContain(t, "hello", "world")
+	spiedT.ExpectRecords(t, true, SpyTestingTRecord{
+		Method: "Log",
+		Inputs: []any{"hello", "world"},
+	})
 }
 
 func Test_SpyTestingT_Logf(t *testing.T) {
@@ -82,6 +93,7 @@ func Test_SpyTestingT_Deadline(t *testing.T) {
 	if !returnedDeadline.Equal(deadline) {
 		t.Error("Deadline did not return the expected deadline")
 	}
+
 	if !hasDeadline {
 		t.Error("Deadline should have returned hasDeadline=true")
 	}

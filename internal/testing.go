@@ -14,6 +14,8 @@ type TestingT interface {
 
 	Fail()
 	FailNow()
+
+	Log(args ...any)
 	Logf(format string, args ...any)
 
 	Context() context.Context

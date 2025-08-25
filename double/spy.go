@@ -77,6 +77,20 @@ func (spy *Spy) FailNow() {
 	spy.failed = true
 }
 
+// Log implements the TestingT interface.
+func (spy *Spy) Log(args ...any) {
+	spy.m.Lock()
+	defer spy.m.Unlock()
+
+	spy.underlyingT.Log(args...)
+	spy.records = append(spy.records, SpyTestingTRecord{
+		Method:  "Log",
+		Inputs:  args,
+		Outputs: nil,
+	})
+	spy.logs = append(spy.logs, fmt.Sprint(args...))
+}
+
 // Logf implements the TestingT interface.
 func (spy *Spy) Logf(format string, args ...any) {
 	spy.m.Lock()

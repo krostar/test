@@ -55,17 +55,22 @@ func Test_Compare(t *testing.T) {
 func Test_Eventually(t *testing.T) {
 	t.Run("success after retries", func(t *testing.T) {
 		retries := 0
+
 		ctx, cancel := context.WithTimeout(t.Context(), 500*time.Millisecond)
 		defer cancel()
 
 		tt, result, msg := Eventually(ctx, t, func(context.Context) error {
 			defer func() { retries++ }()
+
 			if retries < 2 {
 				return fmt.Errorf("boom %d", retries)
 			}
+
 			return nil
 		}, time.Millisecond*10)
+
 		assertCheck(t, tt, result, true, msg, "check passed")
+
 		if retries < 2 {
 			t.Errorf("expected at least 2 retries, got %d", retries)
 		}
@@ -132,6 +137,7 @@ func Test_Panics(t *testing.T) {
 			}
 			return nil
 		})
+
 		assertCheck(t, tt, result, true, msg, "function panicked like expected")
 	})
 
@@ -171,7 +177,7 @@ func assertCheck(t *testing.T, tt test.TestingT, result, expectedResult bool, ms
 	t.Helper()
 
 	if t != tt.(*testing.T) {
-		t.Errorf("expected check to return the same testingT as provided")
+		t.Error("expected check to return the same testingT as provided")
 	}
 
 	if result != expectedResult {
