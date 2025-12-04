@@ -97,8 +97,6 @@ func Not(t test.TestingT, result bool, msgAndArgs ...any) (test.TestingT, bool, 
 // The `f` argument is the function to be tested for panic, `assertReason` is an optional function that can be used to assert on the recovered panic value.
 // If `f` panics, and `assertReason` is provided and returns an error, Panics will return false and the error message.
 // This is usually used like test.Assert(check.Panics(t, func(){panic("boom")}, nil)).
-//
-//nolint:revive // bare-return: we need to do this due because of defer
 func Panics(t test.TestingT, f func(), assertReason func(reason any) error) (tt test.TestingT, result bool, msg string) { //nolint:nonamedreturns // by design of how panics works named return are required
 	if f == nil {
 		return t, false, "function to test for panic must not be nil"
@@ -127,7 +125,7 @@ func Panics(t test.TestingT, f func(), assertReason func(reason any) error) (tt 
 
 	f()
 
-	return
+	return tt, result, msg
 }
 
 // ZeroValue checks if a value is equal to the zero value of its type.

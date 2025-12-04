@@ -40,7 +40,7 @@ func (a SpyTestingTRecord) seemsEqualTo(b SpyTestingTRecord) bool {
 		return false
 	}
 
-	ignore := reflect.TypeOf(SpyTestingTRecordIgnoreParam)
+	ignore := reflect.TypeFor[spyTestingTRecordIgnoreParam]()
 
 	assertParams := func(x, y []any) bool {
 		lenX, lenY := len(x), len(y)

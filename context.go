@@ -20,11 +20,8 @@ func Context(t TestingT) context.Context {
 
 		// because test panics after deadline, we anticipate 1% of timeout duration
 		// to properly quit, it helps to have test failure messages instead of stack traces
-		cleanDuration := time.Duration(int64(float64(panicTimeout) * 0.01))
 		// we don't need to reserve much time, one second should be more than enough
-		if cleanDuration > time.Second {
-			cleanDuration = time.Second
-		}
+		cleanDuration := min(time.Duration(int64(float64(panicTimeout)*0.01)), time.Second)
 
 		// add negative value, meaning subtract time to deadline
 		deadline = deadline.Add(-cleanDuration)

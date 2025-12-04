@@ -46,8 +46,8 @@ func ParsePackageAST(ctx context.Context, pkgDir string) (map[string]*packages.P
 
 	packages.Visit(pkgs, func(pkg *packages.Package) bool {
 		pkgPathToPkg[pkg.PkgPath] = pkg
-		if strings.HasPrefix(pkg.PkgPath, "vendor/") {
-			pkgPathWithoutVendor := strings.TrimPrefix(pkg.PkgPath, "vendor/")
+
+		if pkgPathWithoutVendor, havePrefix := strings.CutPrefix(pkg.PkgPath, "vendor/"); havePrefix {
 			pkgPathToPkg[pkgPathWithoutVendor] = pkg
 		}
 
