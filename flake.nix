@@ -10,7 +10,7 @@
   outputs = {synergy, ...} @ inputs:
     synergy.lib.mkFlake {
       inherit inputs;
-      src = ./nix;
+      src = ./.nix;
       eval.synergy.restrictDependenciesUnits.synergy = ["harmony"];
     };
 }
