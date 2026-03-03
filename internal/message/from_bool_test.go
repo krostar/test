@@ -237,6 +237,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"EQ-not-func-compared-to-nil_true": {
 				getResult: func(t *testing.T) (string, error) {
 					var a any
+
 					pkg, expr := getTestingExpr[bool](t, a == nil)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
@@ -261,6 +262,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"NEQ-not-func-compared-to-nil_false": {
 				getResult: func(t *testing.T) (string, error) {
 					var a any
+
 					pkg, expr := getTestingExpr[bool](t, a != nil)
 					return customizeASTExprRepr(pkg, false, expr)
 				},
@@ -269,6 +271,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"EQ-not-func-compared-to-bool_true-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
+
 					pkg, expr := getTestingExpr[bool](t, b == false)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
@@ -277,6 +280,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"NEQ-not-func-compared-to-bool_true-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
+
 					pkg, expr := getTestingExpr[bool](t, b != true)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
@@ -285,6 +289,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"EQ-not-func-compared-to-bool_false-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
+
 					pkg, expr := getTestingExpr[bool](t, b == true)
 					return customizeASTExprRepr(pkg, false, expr)
 				},
@@ -293,6 +298,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"NEQ-not-func-compared-to-bool_false-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b bool
+
 					pkg, expr := getTestingExpr[bool](t, b != false)
 					return customizeASTExprRepr(pkg, false, expr)
 				},
@@ -304,6 +310,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 						b1 bool
 						b2 bool
 					)
+
 					pkg, expr := getTestingExpr[bool](t, b1 == b2)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
@@ -312,6 +319,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"NEQ-not-func-compared-to-bool-not-constant": {
 				getResult: func(t *testing.T) (string, error) {
 					var b1 bool
+
 					b2 := true
 					pkg, expr := getTestingExpr[bool](t, b1 != b2)
 					return customizeASTExprRepr(pkg, true, expr)
@@ -514,7 +522,9 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"errors.As_true": {
 				getResult: func(t *testing.T) (string, error) {
 					type boomErr interface{ Boom() }
+
 					var bErr boomErr
+
 					pkg, expr := getTestingExpr[bool](t, errors.As(anError, &bErr))
 					return customizeASTExprRepr(pkg, true, expr)
 				},
@@ -523,7 +533,9 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"errors.As_false": {
 				getResult: func(t *testing.T) (string, error) {
 					type boomErr interface{ Boom() }
+
 					var bErr boomErr
+
 					pkg, expr := getTestingExpr[bool](t, errors.As(anError, &bErr))
 					return customizeASTExprRepr(pkg, false, expr)
 				},
@@ -548,6 +560,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"var_true": {
 				getResult: func(t *testing.T) (string, error) {
 					var i bool
+
 					pkg, expr := getTestingExpr[bool](t, i)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
@@ -556,6 +569,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"var_false": {
 				getResult: func(t *testing.T) (string, error) {
 					var i bool
+
 					pkg, expr := getTestingExpr[bool](t, i)
 					return customizeASTExprRepr(pkg, false, expr)
 				},
@@ -564,6 +578,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"const_true": {
 				getResult: func(t *testing.T) (string, error) {
 					const i = false
+
 					pkg, expr := getTestingExpr[bool](t, i)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
@@ -572,6 +587,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"const_false": {
 				getResult: func(t *testing.T) (string, error) {
 					const i = false
+
 					pkg, expr := getTestingExpr[bool](t, i)
 					return customizeASTExprRepr(pkg, false, expr)
 				},
@@ -645,6 +661,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 				getResult: func(t *testing.T) (string, error) {
 					b := make(chan bool, 1)
 					b <- true
+
 					pkg, expr := getTestingExpr[bool](t, <-b)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
