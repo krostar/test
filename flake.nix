@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     synergy = {
       url = "github:krostar/synergy";
       inputs.nixpkgs.follows = "nixpkgs";
