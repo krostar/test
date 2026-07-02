@@ -76,7 +76,7 @@ in {
                   then v // {arguments = [4];}
                   else v
               )
-              deps.synergy.result.data.harmony.ci.linters.golangci-lint.linters.settings.revive.rules;
+              deps.synergy.result.data.krostar.ci.linters.golangci-lint.linters.settings.revive.rules;
           };
         };
       };

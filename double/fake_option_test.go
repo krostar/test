@@ -2,7 +2,6 @@ package double
 
 import (
 	"testing"
-	"time"
 )
 
 func Test_FakeWithContext(t *testing.T) {
@@ -12,16 +11,6 @@ func Test_FakeWithContext(t *testing.T) {
 
 	if o.context == nil {
 		t.Error("o.context should not be nil")
-	}
-}
-
-func Test_FakeWithDeadline(t *testing.T) {
-	o := new(fakeOptions)
-
-	FakeWithDeadline(time.Now())(o)
-
-	if o.deadline.IsZero() {
-		t.Error("o.deadline should not be zero")
 	}
 }
 

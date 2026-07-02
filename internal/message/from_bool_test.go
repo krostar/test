@@ -598,7 +598,7 @@ func Test_customizeASTExprRepr(t *testing.T) {
 			"bool": {
 				getResult: func(t *testing.T) (string, error) {
 					i := true
-					pkg, expr := getTestingExpr[bool](t, (i))
+					pkg, expr := getTestingExpr(t, i)
 					return customizeASTExprRepr(pkg, true, expr)
 				},
 				expectedMessage: "i is true",

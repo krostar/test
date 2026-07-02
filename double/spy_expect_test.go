@@ -12,7 +12,8 @@ func Test_SpyTestingT_ExpectRecords(t *testing.T) {
 			testedT.Logf("hello %s, %d is the only way", "world", 42)
 			testedT.Fail()
 
-			testedT.ExpectRecords(t, true,
+			testedT.ExpectRecords(
+				t, true,
 				SpyTestingTRecord{Method: "Helper"},
 				SpyTestingTRecord{Method: "Logf", Inputs: []any{"hello %s, %d is the only way", []any{"world", 42}}},
 				SpyTestingTRecord{Method: "Fail"},
@@ -25,7 +26,8 @@ func Test_SpyTestingT_ExpectRecords(t *testing.T) {
 			testedT.Fail()
 
 			spiedT := NewSpy(NewFake())
-			testedT.ExpectRecords(spiedT, true,
+			testedT.ExpectRecords(
+				spiedT, true,
 				SpyTestingTRecord{Method: "Fail"},
 				SpyTestingTRecord{Method: "Helper"},
 			)
@@ -52,7 +54,8 @@ func Test_SpyTestingT_ExpectRecords(t *testing.T) {
 			testedT.Logf("hello %s, %d is the only way", "world", 42)
 			testedT.Fail()
 
-			testedT.ExpectRecords(t, false,
+			testedT.ExpectRecords(
+				t, false,
 				SpyTestingTRecord{Method: "Helper"},
 				SpyTestingTRecord{Method: "Logf", Inputs: []any{"hello %s, %d is the only way", []any{"world", 42}}},
 				SpyTestingTRecord{Method: "Fail"},
@@ -64,7 +67,8 @@ func Test_SpyTestingT_ExpectRecords(t *testing.T) {
 			testedT.Helper()
 			testedT.Fail()
 
-			testedT.ExpectRecords(t, false,
+			testedT.ExpectRecords(
+				t, false,
 				SpyTestingTRecord{Method: "Fail"},
 				SpyTestingTRecord{Method: "Helper"},
 			)

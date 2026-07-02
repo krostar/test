@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	"time"
 
 	"github.com/krostar/test/internal"
 )
@@ -118,19 +117,4 @@ func (spy *Spy) Context() context.Context {
 	})
 
 	return ctx
-}
-
-// Deadline implements the TestingT interface.
-func (spy *Spy) Deadline() (time.Time, bool) {
-	spy.m.Lock()
-	defer spy.m.Unlock()
-
-	deadline, isset := spy.underlyingT.Deadline()
-	spy.records = append(spy.records, SpyTestingTRecord{
-		Method:  "Deadline",
-		Inputs:  nil,
-		Outputs: []any{deadline, isset},
-	})
-
-	return deadline, isset
 }

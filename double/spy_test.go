@@ -2,7 +2,6 @@ package double
 
 import (
 	"testing"
-	"time"
 )
 
 func Test_SpyTestingT_Helper(t *testing.T) {
@@ -81,25 +80,5 @@ func Test_SpyTestingT_Context(t *testing.T) {
 	spiedT.ExpectRecords(t, true, SpyTestingTRecord{
 		Method:  "Context",
 		Outputs: []any{ctx},
-	})
-}
-
-func Test_SpyTestingT_Deadline(t *testing.T) {
-	deadline := time.Now().Add(time.Hour)
-
-	spiedT := NewSpy(NewFake(FakeWithDeadline(deadline)))
-	returnedDeadline, hasDeadline := spiedT.Deadline()
-
-	if !returnedDeadline.Equal(deadline) {
-		t.Error("Deadline did not return the expected deadline")
-	}
-
-	if !hasDeadline {
-		t.Error("Deadline should have returned hasDeadline=true")
-	}
-
-	spiedT.ExpectRecords(t, true, SpyTestingTRecord{
-		Method:  "Deadline",
-		Outputs: []any{deadline, true},
 	})
 }

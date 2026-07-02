@@ -2,7 +2,6 @@ package internal
 
 import (
 	"context"
-	"time"
 )
 
 // TestingT is an interface for testing types.
@@ -19,5 +18,4 @@ type TestingT interface {
 	Logf(format string, args ...any)
 
 	Context() context.Context
-	Deadline() (time.Time, bool)
 }

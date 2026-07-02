@@ -2,7 +2,6 @@ package double
 
 import (
 	"context"
-	"time"
 )
 
 // Fake implements a minimal TestingT that does nothing.
@@ -53,10 +52,4 @@ func (Fake) Logf(string, ...any) {}
 // Returns the context specified during creation, or background context by default.
 func (t Fake) Context() context.Context {
 	return t.o.context
-}
-
-// Deadline implements the TestingT interface.
-// Returns the deadline specified during creation, or no deadline by default.
-func (t Fake) Deadline() (time.Time, bool) {
-	return t.o.deadline, !t.o.deadline.IsZero()
 }
